@@ -12,10 +12,10 @@
     <title>Jumbotron Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="jumbotron.css" rel="stylesheet">
+    <link href="assets/css/jumbotron.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -58,37 +58,94 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Howdy</h1>
-        <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-
-<ol>
-  <li><a href="fullmatches.php">fullmatches</a></li>
-  <li><a href="liquid-trello/public/">liquid trello</a></li>
-	<li><a href="info.php">phpinfo</a></li>
-	<li><a href="http://local.phpmyadmin.com/">php my admin</a></li>
-	<li><a href="http://ci.sharpdotinc.com/">Jenkins</a></li>
-	<li><a href="/bergdorf-directory">bergdorf-directory</a></li>
-	<li><a href="/skovr-nfc">skovr-nfc</a></li>
-</ol>
-<p>How to restart apache on a mac?</p>
-<code>sudo apachectl restart</code>
-<p>How to restart mysql on a mac?</p>
-<code>sudo /usr/local/mysql/support-files/mysql.server restart</code>
-<p>How to make a directory writable by Apache in Mac OS X</p>
-<code>chown -R _www:staff cache</code>
-<p>Code to show all php errors</p>
-<code>ini_set('display_errors',1); ini_set('display_startup_errors',1); error_reporting(-1);</code>
-
-<p>Command to checkout a branch from github and track it</p>
-<code>git checkout -t origin/BRANCHNAME</code>
-
-<p>Grep - show 33 extra lines around a match of 'foo'</p>
-<code>grep -C 33 foo README.txt</code>
-
-
+        <h1>Work or Home</h1>
+        <p>
+          date / time / weather
+        </p>
         <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
       </div>
     </div>
+
+    <div class="container">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+          <li role="presentation"><a href="#work" aria-controls="profile" role="tab" data-toggle="tab">Work</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <div role="tabpanel" class="tab-pane active" id="home">
+            <p>
+            
+            status!<br>
+            events coming up this week
+            </p>
+            <hr />
+            <h3>My todos at home</h3>
+            <ol>
+              <li>have a poker game</li>
+              <li>do laundry</li>
+              <li>clean bathroom</li>
+              <li>clean kitchen</li>
+              <li>do moulding in hallway</li>
+              <li>plan how to make the kitchen better</li>
+              <li>workout!</li>
+              <li>blow the leaves</li>
+              <li>clean the livingroom</li>
+              <li>buy workout stuff (done)</li>
+              <li>buy xmas presents for jena</li>
+              <li>clean our bedroom</li>
+              <li>improve! our bedroom</li>
+              <li>pack hats and warm stuff for jena</li>
+              <li>send grandma a birthday card</li>
+            </ol>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="work">
+            <ol>
+              <li><a href="fullmatches.php">fullmatches</a></li>
+              <li><a href="liquid-trello/public/">liquid trello</a></li>
+              <li><a href="info.php">phpinfo</a></li>
+              <li><a href="http://local.phpmyadmin.com/">php my admin</a></li>
+              <li><a href="http://ci.sharpdotinc.com/">Jenkins</a></li>
+              <li><a href="/bergdorf-directory">bergdorf-directory</a></li>
+              <li><a href="/skovr-nfc">skovr-nfc</a></li>
+            </ol>
+
+            <p>
+            date / time / weather
+            status!<br>
+            current sprints (burndowns)<br>
+            future sprints (nearest date of unplanned sprint)<br>
+            support tickets: # critical?<br>
+            new biz pending: items past due or due soon<br>
+            timesheets status: any not done?
+            </p>
+            <hr />
+            <h3>My todos</h3>
+            <ol>
+              <li></li>
+              <li>somethign else</li>
+            </ol>
+
+            <h3>Dev tips</h3>
+            <p>How to restart apache on a mac?</p>
+            <code>sudo apachectl restart</code>
+            <p>How to restart mysql on a mac?</p>
+            <code>sudo /usr/local/mysql/support-files/mysql.server restart</code>
+            <p>How to make a directory writable by Apache in Mac OS X</p>
+            <code>chown -R _www:staff cache</code>
+            <p>Code to show all php errors</p>
+            <code>ini_set('display_errors',1); ini_set('display_startup_errors',1); error_reporting(-1);</code>
+
+            <p>Command to checkout a branch from github and track it</p>
+            <code>git checkout -t origin/BRANCHNAME</code>
+
+            <p>Grep - show 33 extra lines around a match of 'foo'</p>
+            <code>grep -C 33 foo README.txt</code>
+          </div>
+        </div>          
+    </div> <!-- .container -->
 
     <div class="container">
       <!-- Example row of columns -->
@@ -122,9 +179,22 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <script>
+    $(function() {
+
+      $('.nav-tabs a').click(function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+      })
+
+    });
+
+    </script>
+
   </body>
 </html>
 
