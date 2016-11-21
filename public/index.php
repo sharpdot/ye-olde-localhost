@@ -59,6 +59,8 @@
     <div class="jumbotron">
       <div class="container">
         <h1>Work or Home</h1>
+
+
         <p>
           date / time / weather
         </p>
@@ -77,33 +79,25 @@
         <div class="tab-content">
           <div role="tabpanel" class="tab-pane active" id="home">
             <p>
-            
-            status!<br>
-            events coming up this week
+            events coming up this week?
             </p>
             <hr />
             <h3>My todos at home</h3>
             <ol>
-              <li>have a poker game</li>
               <li>do laundry</li>
-              <li>clean bathroom</li>
-              <li>clean kitchen</li>
+              <li>have a poker game</li>
+              <li>send grandma a birthday card</li>
               <li>do moulding in hallway</li>
               <li>plan how to make the kitchen better</li>
               <li>workout!</li>
               <li>blow the leaves</li>
-              <li>clean the livingroom</li>
               <li>buy workout stuff (done)</li>
               <li>buy xmas presents for jena</li>
-              <li>clean our bedroom</li>
               <li>improve! our bedroom</li>
-              <li>pack hats and warm stuff for jena</li>
-              <li>send grandma a birthday card</li>
             </ol>
           </div>
           <div role="tabpanel" class="tab-pane" id="work">
             <ol>
-              <li><a href="fullmatches.php">fullmatches</a></li>
               <li><a href="liquid-trello/public/">liquid trello</a></li>
               <li><a href="info.php">phpinfo</a></li>
               <li><a href="http://local.phpmyadmin.com/">php my admin</a></li>
@@ -151,9 +145,9 @@
       <!-- Example row of columns -->
       <div class="row">
         <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <h2>Fullmatches</h2>
+          <div id="fullmatches">fullmatches feed data here please</div>
+          <p><a class="btn btn-primary" href="/fullmatches" role="button">Details &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>Heading</h2>
@@ -183,6 +177,8 @@
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
 
+    <script src="lib/moment.js"></script>
+
     <script>
     $(function() {
 
@@ -190,6 +186,35 @@
         e.preventDefault()
         $(this).tab('show')
       })
+      //
+
+
+function parseRSS(url, callback) {
+  $.ajax({
+    url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
+    dataType: 'json',
+    success: function(data) {
+      callback(data.responseData.feed);
+    }
+  });
+}
+
+parseRSS('http://www.fullmatchesandshows.com/feed/', function(feed){
+  console.log('got the feed!', feed);
+  function cleanTitle(title){
+    return title.replace('The post', '').replace('appeared first on Full Matches and Shows.','');
+  }
+  var $wrap = $('#fullmatches'),
+    items = '';
+    $(feed.entries).each(function(index, entry){
+      if (entry.content.indexOf('Highlights') > -1){
+        //http://localhost/fullmatches/?url=http%3A%2F%2Fwww.fullmatchesandshows.com%2F2016%2F11%2F20%2Fac-milan-vs-inter-highlights-full-match-3%2F#
+      items += '<div class="item"><a href="/fullmatches/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.contentSnippet) + '</a></div>';
+    }
+    });
+  $wrap.html(items);
+});
+
 
     });
 
