@@ -147,7 +147,7 @@
         <div class="col-md-4">
           <h2>Fullmatches</h2>
           <div id="fullmatches">fullmatches feed data here please</div>
-          <p><a class="btn btn-primary" href="/fullmatches" role="button">Details &raquo;</a></p>
+          <p><a class="btn btn-primary" href="/fm" role="button">Details &raquo;</a></p>
         </div>
         <div class="col-md-4">
           <h2>Heading</h2>
@@ -209,7 +209,7 @@ parseRSS('http://www.fullmatchesandshows.com/feed/', function(feed){
     $(feed.entries).each(function(index, entry){
       if (entry.content.indexOf('Highlights') > -1){
         //http://localhost/fullmatches/?url=http%3A%2F%2Fwww.fullmatchesandshows.com%2F2016%2F11%2F20%2Fac-milan-vs-inter-highlights-full-match-3%2F#
-      items += '<div class="item"><a href="/fullmatches/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.contentSnippet) + '</a></div>';
+      items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.contentSnippet) + '</a></div>';
     }
     });
   $wrap.html(items);
