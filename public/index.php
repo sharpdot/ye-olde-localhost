@@ -211,9 +211,12 @@ p</code>
           <p><a class="btn btn-primary" href="/fullmatches" role="button">Details &raquo;</a></p>
         </div>
         <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <h2>Pay now form</h2>
+          <p>Copy this for invoices</p>
+          <form name="PrePage" method="post" action="https://Simplecheckout.authorize.net/payment/CatalogPayment.aspx">
+          <input type="hidden" name="LinkId" value="c8b9e7d3-b605-4195-8e17-f976085f3927">
+          <input type="submit" value="Pay Invoice Here">
+          </form>          
        </div>
         <div class="col-md-4">
           <h2>Heading</h2>
