@@ -58,13 +58,12 @@
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container">
-        <h1>Work or Home</h1>
-
-
+        <h1>Ok</h1>
         <p>
-          date / time / weather
+          <span id="current-date-time">date / time</span><br />
+          <span id="current-weather">weather</span>
         </p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Whats this for? &raquo;</a></p>
       </div>
     </div>
 
@@ -187,38 +186,65 @@
         $(this).tab('show')
       })
       //
+      function parseRSS(url, callback) {
+        $.ajax({
+          url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
+          dataType: 'json',
+          success: function(data) {
+            callback(data.responseData.feed);
+          }
+        });
+      }
+
+      parseRSS('http://www.fullmatchesandshows.com/feed/', function(feed){
+        //console.log('got the feed!', feed);
+        function cleanTitle(title){
+          return title.replace('The post', '').replace('appeared first on Full Matches and Shows.','');
+        }
+        var $wrap = $('#fullmatches'),
+          items = '';
+          $(feed.entries).each(function(index, entry){
+            if (entry.content.indexOf('Highlights') > -1){
+              //http://localhost/fullmatches/?url=http%3A%2F%2Fwww.fullmatchesandshows.com%2F2016%2F11%2F20%2Fac-milan-vs-inter-highlights-full-match-3%2F#
+            items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.contentSnippet) + '</a></div>';
+          }
+          });
+        $wrap.html(items);
+      });
+      //
+      function setDateTime(){
+        $('#current-date-time').text(moment().format('MMM Do, h:mm'));
+      }
+      setDateTime();
+      setInterval(setDateTime, 30*1000);
+      //
+      var zip = 30316,
+        city = 'Atlanta',
+        days = 5;
+      $.ajax({
+          //url: "http://api.openweathermap.org/data/2.5/weather?units=imperial&q="+city+",us&appid=9a54a5ff917e7a54fc257ae34f1007cd",
+          url: "http://api.openweathermap.org/data/2.5/forecast/daily?cnt="+days+"&units=imperial&q="+city+",us&appid=9a54a5ff917e7a54fc257ae34f1007cd",
+          dataType: 'jsonp',
+          success: function(result){
+            console.log(result);
+            var weather = '';
+              $(result.list).each(function(index,day){
+                var theday = (index == 0) ? 'Today' : moment.unix(day.dt).format('dddd');
+                weather += '<div class="weather-day">' + theday + ': ' + day.weather[0].main + ' <small>(' + day.temp.min + ' / ' + day.temp.max + ')</small></div>';
+
+              });
+//            var message = ("Currently in "+ city + ': <strong>' + result.weather[0].main + ' ' + Math.round(result.main.temp) + '</strong>');
+            $('#current-weather').html(weather);
+          }
+      });
 
 
-function parseRSS(url, callback) {
-  $.ajax({
-    url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
-    dataType: 'json',
-    success: function(data) {
-      callback(data.responseData.feed);
-    }
-  });
-}
 
-parseRSS('http://www.fullmatchesandshows.com/feed/', function(feed){
-  console.log('got the feed!', feed);
-  function cleanTitle(title){
-    return title.replace('The post', '').replace('appeared first on Full Matches and Shows.','');
-  }
-  var $wrap = $('#fullmatches'),
-    items = '';
-    $(feed.entries).each(function(index, entry){
-      if (entry.content.indexOf('Highlights') > -1){
-        //http://localhost/fullmatches/?url=http%3A%2F%2Fwww.fullmatchesandshows.com%2F2016%2F11%2F20%2Fac-milan-vs-inter-highlights-full-match-3%2F#
-      items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.contentSnippet) + '</a></div>';
-    }
-    });
-  $wrap.html(items);
-});
-
-
+    // end
     });
 
     </script>
+
 
   </body>
 </html>
