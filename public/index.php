@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon.ico">
 
-    <title>Jumbotron Template for Bootstrap</title>
+    <title>Ye Olde Localhost</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -70,8 +70,8 @@
     <div class="container">
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
-          <li role="presentation"><a href="#work" aria-controls="profile" role="tab" data-toggle="tab">Work</a></li>
+          <li role="presentation" class="active"><a id="tab-home" href="#home" aria-controls="home" role="tab" data-toggle="tab">Home</a></li>
+          <li role="presentation"><a id="tab-work" href="#work" aria-controls="profile" role="tab" data-toggle="tab">Work</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -241,15 +241,22 @@ p</code>
     <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
 
     <script src="lib/moment.js"></script>
+    <script src="lib/js.cookie.js"></script>
 
     <script>
     $(function() {
-
+      // enable tabs and use a cookie to remember which one was last open
       $('.nav-tabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-      })
-      //
+        e.preventDefault();
+        $(this).tab('show');
+        Cookies.set('active-tab', $(this).prop('id'));
+      });
+      if (Cookies.get('active-tab')){
+        var tabId = Cookies.get('active-tab');
+        $('#'+tabId).tab('show');
+      }
+
+      // populate fullmatches feed
       function parseRSS(url, callback) {
         $.ajax({
           url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
