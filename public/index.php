@@ -136,6 +136,67 @@
 
             <p>Grep - show 33 extra lines around a match of 'foo'</p>
             <code>grep -C 33 foo README.txt</code>
+
+
+    <h3>Helpful Ubuntu commands</h3>
+
+<p>find files by name in linux command line</p>
+<code>find -name 'foobar'</code>
+<hr>
+
+<p>copy and paste 5 lines in vim</p>
+<code>y5y<br>
+p</code>
+<hr>
+
+<p>delete 7 lines in vim (the lines are those under the cursor)</p>
+<code>d7d</code>
+<hr>
+
+<p>push new git local branch to remote</p>
+<code>git push -u origin feature_branch_name</code>
+<hr>
+
+<p>various drush goodies...</p>
+<code>drush pm-enable module_name -y</code><br>
+<code>drush pm-update</code><br>
+<code>drush pm-update module_name_1 module_name_2</code><br>
+<code>drush pm-updatedb</code><br>
+<code>drush cc</code><br>
+<code>drush pm-list | grep module_name</code><br>
+<code>drush watchdog-show</code>
+
+<hr>
+<p>svn checkout command line</p>
+<code>svn checkout --username=jdost --password=x http://svn.sharpdotinc.com/repo/ here</code>
+<hr>
+<p>show php errors from inside php</p>
+<code>error_reporting(E_ALL); ini_set('display_errors', 1);</code>
+<hr>
+
+<p>checkout and track git branch</p>
+<code>git checkout -t origin/BRANCHNAME</code>
+<hr>
+
+<p>svn add all new files in a folder</p>
+<code>svn add --force .</code>
+<hr>
+
+<p>svn remove all deleted files in a folder</p>
+<code>svn st | grep '^!' | awk '{print $2}' | xargs svn delete --force</code>
+<hr>
+
+<p>flush memcached cache</p>
+<code>echo 'flush_all' | nc localhost 11211</code>
+<hr>
+
+<p>scp file from remote to local</p>
+<code>scp REMOTE:/path/to/file .</code>
+<hr>
+
+
+
+
           </div>
         </div>          
     </div> <!-- .container -->
@@ -149,9 +210,12 @@
           <p><a class="btn btn-primary" href="/fm" role="button">Details &raquo;</a></p>
         </div>
         <div class="col-md-4">
-          <h2>Heading</h2>
-          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
-          <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+          <h2>Pay now form</h2>
+          <p>Copy this for invoices</p>
+          <form name="PrePage" method="post" action="https://Simplecheckout.authorize.net/payment/CatalogPayment.aspx">
+          <input type="hidden" name="LinkId" value="c8b9e7d3-b605-4195-8e17-f976085f3927">
+          <input type="submit" value="Pay Invoice Here">
+          </form>          
        </div>
         <div class="col-md-4">
           <h2>Heading</h2>
