@@ -64,7 +64,7 @@
           <span id="current-date-time">date / time</span><br />
           <span id="current-weather">weather</span>
         </p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Whats this for? &raquo;</a></p>
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Reload &raquo;</a></p>
       </div>
     </div>
 
@@ -245,42 +245,57 @@ p</code>
     <script src="lib/js.cookie.js"></script>
 
     <script>
-    $(function() {
-      // enable tabs and use a cookie to remember which one was last open
-      $('.nav-tabs a').click(function (e) {
-        e.preventDefault();
-        $(this).tab('show');
-        Cookies.set('active-tab', $(this).prop('id'));
-      });
-      if (Cookies.get('active-tab')){
-        var tabId = Cookies.get('active-tab');
-        $('#'+tabId).tab('show');
-      }
-      // make headlines
-      var sayings = [
-        { title: 'Say No', description: 'When you say "NO" you have more time to read, learn, sleep, ask questions, contact friends, love life. Say "NO" more.' },
-        { title: 'Love', description: 'This is the only religion. This is the only thing worth surrendering to. This is the fuel for your idea muscle.' },
-        { title: 'Make Mistakes', description: 'Mistakes are the spell books of success. Study them hard. Learn their incantations. When muscles tear they rebuild stronger.' },
-        { title: 'Plant Seeds', description: 'Basic garden math: 1% of the seeds turn into 50% of the flowers. Plant lots of seeds.' },
-        { title: 'Be Around People Who Are Kind to You and Love You', description: 'Other people will make you unhappy, unkind and unsuccessful.' },
-        { title: 'Stand next to the smartest person in the room', description: 'Harold Ramis did it (Bill Murray). Steve Jobs did it (Steve Wozniak). Craig Silverstein did it (Who? Larry Page). Kanye West did it (Jay-Z). I make money ONLY when I do this.' },
-        { title: 'No excuses', description: 'Blaming is draining. Complaining is draining. Explaining is draining. We don\'t have enough inner plumbing for all that draining.' },
-        { title: 'Don\'t be in a rush', description: 'Every overnight success I\'ve spoken to, took 10-20 years to get there. BUT ONLY if they celebrated small successes along the way.' },
-        { title: 'Solve difficult gratitude problems', description: 'If you can find a diamond in the mud, you\'re going to end up with a lot of diamonds in life.' },
-        { title: 'Warren Buffett\'s 5/25 rule', description: 'Make a list of the 25 things you want to do in life. Now do the top 5. And NEVER THINK ABOUT THE OTHER 20 EVER AGAIN. Else they will take time away from the 5 that are most important to you.' },
-        { title: 'Write down 10 ideas a day', description: 'This actually turns into a super power. Do this for six months straight and see what happens.' },
-        { title: 'Follow up', description: 'Don\'t be shy or bad or lazy at this. Send an email the next day with an idea on the next step. You have to do this!' },
-        { title: 'Ask questions', description: 'There are more questions than answers. Opportunities are buried in the questions. Facts can be outsourced.' },
-        { title: '1% a day', description: 'Whatever you want to get better at: do 1% more each day. 1% a day, compounded, is 3800% a year. You win.' },
-        { title: 'Right now', description: 'Regret will waste time today worrying about yesterday. And anxiety will steal energy from the future. Focus on right now.' },
-        { title: 'Sleep', description: 'Sleep rejuvenates brain cells, heals the body, reduces anxiety. And your brain is only active 2-5 hours a day. Sweet dreams.' },
-        { title: 'Every day, avoid death', description: 'You can\'t get rich from a hospital bed. Or a grave. Move every day, sleep well, eat well.' },
-        { title: 'Do one thing every day you loved as a kid', description: 'This is usually the fuel that can power your life.' },
-        { title: 'Give yourself permission to sometimes be wrong', description: 'That\'s number 19 and 20 :)' }
-      ];
-      var rnd = sayings[Math.floor(Math.random()*sayings.length)];
-      $('.jumbotron h1').text(rnd.title);
-      $('.jumbotron p.description').text(rnd.description);
+
+function draw(){
+  drawSayings();
+  drawFullmatches();
+  drawWeather();
+}
+
+
+  function drawTabs(){
+    // enable tabs and use a cookie to remember which one was last open
+    $('.nav-tabs a').click(function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+      Cookies.set('active-tab', $(this).prop('id'));
+    });
+    if (Cookies.get('active-tab')){
+      var tabId = Cookies.get('active-tab');
+      $('#'+tabId).tab('show');
+    }
+  }
+
+  function drawSayings(){
+    // make headlines
+    var sayings = [
+      { title: 'Say No', description: 'When you say "NO" you have more time to read, learn, sleep, ask questions, contact friends, love life. Say "NO" more.' },
+      { title: 'Love', description: 'This is the only religion. This is the only thing worth surrendering to. This is the fuel for your idea muscle.' },
+      { title: 'Make Mistakes', description: 'Mistakes are the spell books of success. Study them hard. Learn their incantations. When muscles tear they rebuild stronger.' },
+      { title: 'Plant Seeds', description: 'Basic garden math: 1% of the seeds turn into 50% of the flowers. Plant lots of seeds.' },
+      { title: 'Be Around People Who Are Kind to You and Love You', description: 'Other people will make you unhappy, unkind and unsuccessful.' },
+      { title: 'Stand next to the smartest person in the room', description: 'Harold Ramis did it (Bill Murray). Steve Jobs did it (Steve Wozniak). Craig Silverstein did it (Who? Larry Page). Kanye West did it (Jay-Z). I make money ONLY when I do this.' },
+      { title: 'No excuses', description: 'Blaming is draining. Complaining is draining. Explaining is draining. We don\'t have enough inner plumbing for all that draining.' },
+      { title: 'Don\'t be in a rush', description: 'Every overnight success I\'ve spoken to, took 10-20 years to get there. BUT ONLY if they celebrated small successes along the way.' },
+      { title: 'Solve difficult gratitude problems', description: 'If you can find a diamond in the mud, you\'re going to end up with a lot of diamonds in life.' },
+      { title: 'Warren Buffett\'s 5/25 rule', description: 'Make a list of the 25 things you want to do in life. Now do the top 5. And NEVER THINK ABOUT THE OTHER 20 EVER AGAIN. Else they will take time away from the 5 that are most important to you.' },
+      { title: 'Write down 10 ideas a day', description: 'This actually turns into a super power. Do this for six months straight and see what happens.' },
+      { title: 'Follow up', description: 'Don\'t be shy or bad or lazy at this. Send an email the next day with an idea on the next step. You have to do this!' },
+      { title: 'Ask questions', description: 'There are more questions than answers. Opportunities are buried in the questions. Facts can be outsourced.' },
+      { title: '1% a day', description: 'Whatever you want to get better at: do 1% more each day. 1% a day, compounded, is 3800% a year. You win.' },
+      { title: 'Right now', description: 'Regret will waste time today worrying about yesterday. And anxiety will steal energy from the future. Focus on right now.' },
+      { title: 'Sleep', description: 'Sleep rejuvenates brain cells, heals the body, reduces anxiety. And your brain is only active 2-5 hours a day. Sweet dreams.' },
+      { title: 'Every day, avoid death', description: 'You can\'t get rich from a hospital bed. Or a grave. Move every day, sleep well, eat well.' },
+      { title: 'Do one thing every day you loved as a kid', description: 'This is usually the fuel that can power your life.' },
+      { title: 'Give yourself permission to sometimes be wrong', description: 'That\'s number 19 and 20 :)' }
+    ];
+    var rnd = sayings[Math.floor(Math.random()*sayings.length)];
+    $('.jumbotron h1').text(rnd.title);
+    $('.jumbotron p.description').text(rnd.description);
+
+  }
+
+    function drawFullmatches(){
       // populate fullmatches feed
       function parseRSS(url, callback) {
         $.ajax({
@@ -307,13 +322,9 @@ p</code>
           });
         $wrap.html(items);
       });
-      //
-      function setDateTime(){
-        $('#current-date-time').text(moment().format('MMM Do, h:mm'));
-      }
-      setDateTime();
-      setInterval(setDateTime, 30*1000);
-      //
+  }
+
+  function drawWeather(){
       var zip = 30316,
         city = 'Atlanta',
         days = 5;
@@ -333,8 +344,26 @@ p</code>
             $('#current-weather').html(weather);
           }
       });
+  }
 
-    // end
+      function drawDateTime(){
+        $('#current-date-time').text(moment().format('MMM Do, h:mm'));
+      }
+
+    // on ready
+    $(function() {
+
+      draw();
+      drawTabs();
+      drawDateTime();
+      setInterval(drawDateTime, 30*1000);
+
+      $('.jumbotron .btn-primary').click(function(evt){
+        evt.preventDefault();
+        draw();
+      });
+
+      // end on ready
     });
 
     </script>
