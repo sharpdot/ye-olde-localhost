@@ -1,14 +1,24 @@
-//exports.company = 'Google';
+// load .env
+require('dotenv').config();
 
 // start server
-var http = require("http");
-var connect = require('connect');
-var serveStatic = require('serve-static');
+var debug = require('debug')('ye-olde'),
+	http = require("http"),
+	connect = require('connect'),
+	serveStatic = require('serve-static'),
+	bodyParser = require('body-parser'),
+	name = 'YeOldeLocalhost';
 
-console.log('\n\n--- Node Version: ' + process.version + ' ---');
+debug('booting %s', name);
+
+var SERVER_PORT = process.env.SERVER_PORT;
 
 // Set up Connect routing
 var app = connect()
+	.use(bodyParser.urlencoded())
+    .use('/devflow/settings', function(req, res, next){
+		handle_json_request(req, res, next, devflow_settings);
+    })
     .use(serveStatic(__dirname + '/public'))
     .use(function(req, res) {
         console.log('Could not find handler for: ' + req.url);
@@ -20,8 +30,68 @@ var app = connect()
     });
 
 // Start node server listening on specified port -----
-http.createServer(app).listen(8000);
+http.createServer(app).listen(SERVER_PORT);
+debug('HTTP server listening on port %s', SERVER_PORT);
 
-console.log('HTTP server listening on port 8000');
+// simpler way to handle json response
+function handle_json_request(req, res, next, callback){
+  callback(req, function(err, data){
+	if (err) {
+  		res.end(JSON.stringify(err));
+	} else {
+  		res.end(JSON.stringify(data));
+	}
+  });
+}
+
+// settings are saved in a file named .devflow
+function devflow_settings(req, next){
+	var fs = require('fs'),
+		path = require('path');
+	var settingsFilePath = path.join(__dirname, '.devflow');
+	// save settings if passed in
+	console.log('settings?',settingsData);
+	console.dir(req.body);
+	if (typeof req.body.settings !== 'undefined' && req.body.settings){
+		console.log('write the file!');
+		var settingsData = JSON.parse(req.body.settings);	// parse and then stringify it to sanitize it
+		fs.writeFile(settingsFilePath, JSON.stringify(settingsData), function(err) {
+		    if(err) {
+		        return next(err);
+		    }
+		});
+	} else {
+		console.log('no settings passed in');
+	}
+	// return all settings
+	fs.readFile(settingsFilePath, {encoding: 'utf-8'}, function(err,data){
+	    if (err){
+	    	if(err.code == 'ENOENT') {
+	    		debug('no devflow settings file - creating it');
+	    		var settingsData = {};
+				fs.writeFile(settingsFilePath, JSON.stringify(settingsData), function(err) {
+				    if(err) {
+				        return next(err);
+				    }
+				    return next(null,settingsData);
+				});	    		
+	    	} else {
+	    		// some other error
+		    	return next(err);
+	    	}
+	    } else{
+		    return next(null,JSON.parse(data));
+	    }
+	});
+	/*
+	needed?
+	web server type = apache or nginx
+	web server restart command	
+	root database creds
+	*/
+
+}
+
+
 
 

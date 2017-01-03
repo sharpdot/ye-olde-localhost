@@ -26,6 +26,33 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+<style>
+#current-date-time {
+    width: 200px;
+    height: 100px;
+    font-size: 50px;
+    line-height: 50px;
+}
+#current-date-time .date { display: block; }
+#current-date-time .time { display: block; }
+
+.sayings h1 {
+  font-size: 36px;
+}
+.sayings p {
+  font-size: 20px;
+  font-weight: 200;
+}
+
+.devflow .settings textarea {
+  width: 100%;
+  min-height: 150px;
+  font-size: 10px;
+}
+</style>
+
+
   </head>
 
   <body>
@@ -39,7 +66,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">jed localhost</a>
+          <a class="navbar-brand" href="/">localhost</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right">
@@ -56,15 +83,42 @@
     </nav>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Ok!</h1>
-        <p class="description">It's like i said...</p>
-        <p>
-          <span id="current-date-time">date / time</span><br />
-          <span id="current-weather">weather</span>
-        </p>
-        <p><a class="btn btn-primary btn-lg" href="#" role="button">Reload &raquo;</a></p>
+    <div class="container">
+      <div class="row">
+        <div class="devflow">
+          <div class="col-md-6">
+            <h2>Devflow</h2>
+            <div class="settings">
+              <form action="/devflow/settings" method="post">
+                <p>Settings:<br />
+                <textarea name="settings"></textarea></p>
+                <input type="button" class="btn btn-default btn-init" value="initialize">
+                <input type="submit" class="btn btn-primary" value="save">
+              </form>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="projects">
+            <h2>Projects</h2>
+            projects here 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="sayings col-md-12">
+          <h1>Ok!</h1>
+          <p class="description">It's like i said...</p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div id="current-date-time"><span class="time">time</span><span class="date">date</span></div>
+        </div>
+        <div class="col-md-8">
+          <div id="current-weather">weather</div>
+        </div>
       </div>
     </div>
 
@@ -291,8 +345,8 @@ function draw(){
       { title: 'Give yourself permission to sometimes be wrong', description: 'That\'s number 19 and 20 :)' }
     ];
     var rnd = sayings[Math.floor(Math.random()*sayings.length)];
-    $('.jumbotron h1').text(rnd.title);
-    $('.jumbotron p.description').text(rnd.description);
+    $('.sayings h1').text(rnd.title);
+    $('.sayings p.description').text(rnd.description);
 
   }
 
@@ -348,7 +402,53 @@ function draw(){
   }
 
       function drawDateTime(){
-        $('#current-date-time').text(moment().format('MMM Do, h:mm'));
+        //$('#current-date-time').text(moment().format('MMM Do, h:mm:ss'));
+        $('#current-date-time .date').text(moment().format('MMM Do'));
+        $('#current-date-time .time').text(moment().format('h:mm:ss'));
+        setTimeout(drawDateTime, 1000);
+      }
+
+      function initDevFlow(){
+        // load the settings and popuate the form
+        $.ajax({
+          url: '/devflow/settings',
+          dataType: 'json',
+          success: function(data) {
+            // get all the settings back and display them
+            // the stringify params pretty-print it
+            $('.devflow .settings textarea').val(JSON.stringify(data, undefined, 4));
+          }
+        });
+        $('.devflow .settings .btn-init').click(function(evt){
+          // gather and set default values...
+          /*
+  web server type = apache or nginx
+  web server restart command  
+  root database creds          
+          */
+          var serverType = prompt('What is your web server type? apache or nginx?', 'apache');
+          if (serverType == null) { return false; }
+          var serverVhostDir = prompt('What directory do you store your sites files in?', '/usr/local/etc/apache2/2.4/sites-enabled');
+          if (serverType == null) { return false; }
+          var restartCommand = prompt('What command do you use to restart the server?', 'sudo apachectl -k restart');
+          if (serverType == null) { return false; }
+          var dbRootPassword = prompt('What is your mysql root password?', '');
+          if (serverType == null) { return false; }
+          var settings = {
+            server: serverType,
+            serverVhostDir: serverVhostDir,
+            restartCmd: restartCommand,
+            dbHost: 'localhost',
+            dbUser: 'root',
+            dbPassword: dbRootPassword,
+            projects: []
+          };
+          $('.devflow .settings textarea').val(JSON.stringify(settings, undefined, 4));
+          $('.devflow .settings form').submit();
+          evt.preventDefault();
+        });
+
+
       }
 
     // on ready
@@ -357,12 +457,7 @@ function draw(){
       draw();
       drawTabs();
       drawDateTime();
-      setInterval(drawDateTime, 30*1000);
-
-      $('.jumbotron .btn-primary').click(function(evt){
-        evt.preventDefault();
-        draw();
-      });
+      initDevFlow();
 
       // end on ready
     });

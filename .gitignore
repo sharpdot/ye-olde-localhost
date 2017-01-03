@@ -1,3 +1,10 @@
 node_modules
 npm-debug.log
 public/fm
+.env
+
+# for devflow settings
+.devflow
+
+# for mac
+.DS_Store
