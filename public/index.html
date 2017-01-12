@@ -99,8 +99,9 @@
           </div>
           <div class="col-md-6">
             <div class="projects">
-            <h2>Projects</h2>
-            projects here 
+              <h2>Projects</h2>
+              <ul></ul>
+              <a class="btn btn-primary btn-new-project">new project</a>
             </div>
           </div>
         </div>
@@ -262,7 +263,7 @@ p</code>
       <div class="row">
         <div class="col-md-4">
           <h2>Fullmatches</h2>
-          <div id="fullmatches">fullmatches feed data here please</div>
+          <div id="fullmatches">loading fullmatches data...</div>
           <p><a class="btn btn-primary" href="/fm" role="button">Details &raquo;</a></p>
         </div>
         <div class="col-md-4">
@@ -354,25 +355,26 @@ function draw(){
       // populate fullmatches feed
       function parseRSS(url, callback) {
         $.ajax({
-          url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=10&callback=?&q=' + encodeURIComponent(url),
+          url: '/rss/parse?q=' + encodeURIComponent(url),
           dataType: 'json',
           success: function(data) {
-            callback(data.responseData.feed);
+            //console.log('got the feed back - parse rss?', data);
+            callback(data);
           }
         });
       }
 
       parseRSS('http://www.fullmatchesandshows.com/feed/', function(feed){
-        //console.log('got the feed!', feed);
+        console.log('got the feed!', feed);
         function cleanTitle(title){
           return title.replace('The post', '').replace('appeared first on Full Matches and Shows.','');
         }
         var $wrap = $('#fullmatches'),
           items = '';
-          $(feed.entries).each(function(index, entry){
-            if (entry.content.indexOf('Highlights') > -1){
+          $(feed.items).each(function(index, entry){
+            if (entry.title.indexOf('Highlights') > -1){
               //http://localhost/fullmatches/?url=http%3A%2F%2Fwww.fullmatchesandshows.com%2F2016%2F11%2F20%2Fac-milan-vs-inter-highlights-full-match-3%2F#
-            items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.contentSnippet) + '</a></div>';
+            items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.title) + '</a></div>';
           }
           });
         $wrap.html(items);
@@ -417,23 +419,29 @@ function draw(){
             // get all the settings back and display them
             // the stringify params pretty-print it
             $('.devflow .settings textarea').val(JSON.stringify(data, undefined, 4));
+            // update project list
+            var projects = data.projects,
+              list = '';
+            if (projects){
+              list = projects.map(function() {
+                return '<li><a href="#">' + this.name + '</a></li>';
+              })
+              .get()
+              .join('');
+            }
+            $('.devflow .projects ul').html(list);
           }
         });
         $('.devflow .settings .btn-init').click(function(evt){
-          // gather and set default values...
-          /*
-  web server type = apache or nginx
-  web server restart command  
-  root database creds          
-          */
+          // gather and set the default values...
           var serverType = prompt('What is your web server type? apache or nginx?', 'apache');
           if (serverType == null) { return false; }
           var serverVhostDir = prompt('What directory do you store your sites files in?', '/usr/local/etc/apache2/2.4/sites-enabled');
-          if (serverType == null) { return false; }
+          if (serverVhostDir == null) { return false; }
           var restartCommand = prompt('What command do you use to restart the server?', 'sudo apachectl -k restart');
-          if (serverType == null) { return false; }
+          if (restartCommand == null) { return false; }
           var dbRootPassword = prompt('What is your mysql root password?', '');
-          if (serverType == null) { return false; }
+          if (dbRootPassword == null) { return false; }
           var settings = {
             server: serverType,
             serverVhostDir: serverVhostDir,
@@ -447,8 +455,12 @@ function draw(){
           $('.devflow .settings form').submit();
           evt.preventDefault();
         });
-
-
+        $('.devflow .projects .btn-new-project').click(function(evt){
+          var projectDir = prompt('Where is the project root directory?', '~/projects/');
+          if (projectDir == null) { return false; }
+          // go...
+          evt.preventDefault();
+        });
       }
 
     // on ready

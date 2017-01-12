@@ -16,6 +16,9 @@ var SERVER_PORT = process.env.SERVER_PORT;
 // Set up Connect routing
 var app = connect()
 	.use(bodyParser.urlencoded())
+    .use('/rss/parse', function(req, res, next){
+		handle_json_request(req, res, next, rss_parse);
+    })
     .use('/devflow/settings', function(req, res, next){
 		handle_json_request(req, res, next, devflow_settings);
     })
@@ -42,6 +45,21 @@ function handle_json_request(req, res, next, callback){
   		res.end(JSON.stringify(data));
 	}
   });
+}
+
+
+// settings are saved in a file named .devflow
+function rss_parse(req, next){
+	var feed = require('rss-to-json'),
+		query = require('url').parse(req.url,true).query,
+		url = query.q;
+		console.log('aaaaa what is the url passed in?', url);
+	 
+	feed.load(url, function(err, rss){
+		if (err) return next(err);
+
+		return next(null, rss);
+	});	
 }
 
 // settings are saved in a file named .devflow
