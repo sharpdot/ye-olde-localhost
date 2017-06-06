@@ -252,6 +252,33 @@ p</code>
 <hr>
 
 
+<h3>Mac setup</h3>
+used this guide: https://getgrav.org/blog/macos-sierra-apache-mysql-vhost-apc
+
+<p>to change the php version on command line do this:<br>
+brew unlink php55<br>
+brew link php55<br>
+
+my apache stuff is here!<br>
+
+/usr/local/etc/apache2/2.4<br>
+
+Restart Apache with the standard sudo apachectl -k restart command to pick up your changes.<br>
+
+and error logs are here<br>
+tail -f /usr/local/var/log/apache2/error_log<br>
+
+to restart mysql<br>
+brew services stop mariadb<br>
+brew services start mariadb<br>
+
+And to restart node<br>
+- see the process<br>
+> sudo launchctl list | grep yeolde<br>
+- restart the process<br>
+> sudo launchctl stop com.yeoldelocalhost.application<br>
+</p>
+
 
 
           </div>
@@ -372,10 +399,10 @@ function draw(){
         var $wrap = $('#fullmatches'),
           items = '';
           $(feed.items).each(function(index, entry){
-            if (entry.title.indexOf('Highlights') > -1){
+            //if (entry.title.indexOf('Highlights') > -1){
               //http://localhost/fullmatches/?url=http%3A%2F%2Fwww.fullmatchesandshows.com%2F2016%2F11%2F20%2Fac-milan-vs-inter-highlights-full-match-3%2F#
-            items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'">' + cleanTitle(entry.title) + '</a></div>';
-          }
+              items += '<div class="item"><a href="/fm/?url='+encodeURIComponent(entry.link)+'" target="_blank">' + cleanTitle(entry.title) + '</a></div>';
+            //}
           });
         $wrap.html(items);
       });
